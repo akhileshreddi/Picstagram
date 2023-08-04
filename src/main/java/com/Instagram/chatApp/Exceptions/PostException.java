@@ -1,0 +1,8 @@
+package com.Instagram.chatApp.Exceptions;
+
+public class PostException extends Exception{
+
+    public PostException(String message){
+        super(message);
+    }
+}
