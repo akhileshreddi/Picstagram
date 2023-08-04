@@ -43,7 +43,15 @@ public class PostServiceImplementation implements PostService{
 
     @Override
     public String deletePost(Integer postId, Integer userId) throws UserException, PostException {
-        return null;
+        Post post = findPostById(postId);
+        User user = userService.findByUserId(userId);
+        if(post.getUser().getId().equals(user.getId())){
+            postRepository.deleteById(post.getId());
+            return "Post Deleted Successfully";
+        }
+
+        throw new PostException("No access to Delete Post");
+
     }
 
     @Override
@@ -80,13 +88,20 @@ public class PostServiceImplementation implements PostService{
         User user = userService.findByUserId(userId);
         if(!user.getSavedPost().contains(post)){
             user.getSavedPost().add(post);
+            userRepository.save(user);
         }
-        return null;
+        return "Post saved Successfully";
     }
 
     @Override
     public String unsavedPost(Integer postId, Integer userId) throws PostException, UserException {
-        return null;
+        Post post = findPostById(postId);
+        User user = userService.findByUserId(userId);
+        if(!user.getSavedPost().contains(post)){
+            user.getSavedPost().remove(post);
+            userRepository.save(user);
+        }
+        return "Post Removed Successfully";
     }
 
     @Override
