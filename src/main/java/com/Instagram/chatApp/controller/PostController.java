@@ -2,10 +2,12 @@ package com.Instagram.chatApp.controller;
 
 import com.Instagram.chatApp.Exceptions.PostException;
 import com.Instagram.chatApp.Exceptions.UserException;
+import com.Instagram.chatApp.Response.MessageResponse;
 import com.Instagram.chatApp.models.Post;
 import com.Instagram.chatApp.models.User;
 import com.Instagram.chatApp.services.PostService;
 import com.Instagram.chatApp.services.UserService;
+import jakarta.persistence.criteria.CriteriaBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -46,6 +48,57 @@ public class PostController {
 
         return new ResponseEntity<List<Post>>(posts, HttpStatus.OK);
 
+    }
+
+    @GetMapping("/{postId}")
+    public ResponseEntity<Post> findPostByIdHandler(@PathVariable("postId") Integer postId) throws PostException,UserException{
+        Post post = postService.findPostById(postId);
+        return new ResponseEntity<Post>(post, HttpStatus.OK);
+    }
+
+    @PutMapping("/like/{postId}")
+    public ResponseEntity<Post> likePostHandler(@PathVariable("postId") Integer postId, @RequestHeader("Authorization") String token) throws PostException,UserException{
+        User user = userService.findUserProfile(token);
+        Post likedPost = postService.likepost(postId,user.getId());
+        return new ResponseEntity<>(likedPost,HttpStatus.OK);
+    }
+
+    @PutMapping("/unlike/{postId}")
+    public ResponseEntity<Post> unlikePostHandler(@PathVariable("postId") Integer postId, @RequestHeader("Authorization") String token) throws PostException,UserException{
+        User user = userService.findUserProfile(token);
+        Post likedPost = postService.unlikepost(postId,user.getId());
+        return new ResponseEntity<>(likedPost,HttpStatus.OK);
+    }
+
+
+    @DeleteMapping("/delete/{postId}")
+    public ResponseEntity<MessageResponse> deletePostHandler(@PathVariable("postId") Integer postId, @RequestHeader("Authorization") String token) throws PostException,UserException{
+        User user = userService.findUserProfile(token);
+        String message = postService.deletePost(postId,user.getId());
+        MessageResponse messageResponse = new MessageResponse(message);
+
+
+        return new ResponseEntity<MessageResponse>(messageResponse, HttpStatus.ACCEPTED);
+    }
+
+    @PutMapping("/savePost/{postId}")
+    public ResponseEntity<MessageResponse> savePostHandler(@PathVariable("postId") Integer postId, @RequestHeader("Authorization") String token) throws PostException,UserException{
+        User user = userService.findUserProfile(token);
+        String message = postService.savedPost(postId,user.getId());
+
+        MessageResponse messageResponse = new MessageResponse(message);
+
+        return new ResponseEntity<MessageResponse>(messageResponse,HttpStatus.OK);
+    }
+
+    @PutMapping("/unsavePost/{postId}")
+    public ResponseEntity<MessageResponse> unsavePostHandler(@PathVariable("postId") Integer postId, @RequestHeader("Authorization") String token) throws PostException,UserException{
+        User user = userService.findUserProfile(token);
+        String message = postService.unsavedPost(postId,user.getId());
+
+        MessageResponse messageResponse = new MessageResponse(message);
+
+        return new ResponseEntity<MessageResponse>(messageResponse,HttpStatus.OK);
     }
 
 }
