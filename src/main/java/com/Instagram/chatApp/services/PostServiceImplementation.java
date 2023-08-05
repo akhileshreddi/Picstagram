@@ -106,11 +106,33 @@ public class PostServiceImplementation implements PostService{
 
     @Override
     public Post likepost(Integer postId, Integer userId) throws PostException, UserException {
-        return null;
+        Post post = findPostById(postId);
+        User user = userService.findByUserId(userId);
+        UserDto userDto = new UserDto();
+        userDto.setEmail(user.getEmail());
+        userDto.setId(user.getId());
+        userDto.setName(user.getName());
+        userDto.setUserImage(user.getImage());
+        userDto.setUsername(user.getUsername());
+
+        post.getLikedBy().add(userDto);
+
+        return postRepository.save(post);
     }
 
     @Override
     public Post unlikepost(Integer postId, Integer userId) throws PostException, UserException {
-        return null;
+        Post post = findPostById(postId);
+        User user = userService.findByUserId(userId);
+        UserDto userDto = new UserDto();
+        userDto.setEmail(user.getEmail());
+        userDto.setId(user.getId());
+        userDto.setName(user.getName());
+        userDto.setUserImage(user.getImage());
+        userDto.setUsername(user.getUsername());
+
+        post.getLikedBy().remove(userDto);
+
+        return postRepository.save(post);
     }
 }
