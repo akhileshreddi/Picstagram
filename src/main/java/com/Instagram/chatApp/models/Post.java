@@ -2,6 +2,7 @@ package com.Instagram.chatApp.models;
 
 import com.Instagram.chatApp.dto.UserDto;
 import jakarta.persistence.*;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -19,6 +20,8 @@ public class Post {
     private String caption;
     private String image;
     private String location;
+
+    @Column(name="created_at")
     private LocalDateTime createdAt;
     @Embedded
     @AttributeOverrides({
@@ -32,7 +35,7 @@ public class Post {
 
     @Embedded
     @ElementCollection
-    @JoinTable(name="likedByUsers", joinColumns = @JoinColumn(name="user_id"))
+    @JoinTable(name="likedByUsers", joinColumns = @JoinColumn(name="post_id",referencedColumnName = "id"))
     private Set<UserDto> likedByUser = new HashSet<UserDto>();
 
     public Post(Integer id, String caption, String image, String location, LocalDateTime createdAt, UserDto user, List<Comment> comments, Set<UserDto> likedByUser) {
@@ -44,6 +47,10 @@ public class Post {
         this.user = user;
         this.comments = comments;
         this.likedByUser = likedByUser;
+    }
+
+    public Post(){
+
     }
 
     public Integer getId() {
@@ -108,5 +115,10 @@ public class Post {
 
     public void setLikedBy(Set<UserDto> likedByUser) {
         this.likedByUser = likedByUser;
+    }
+
+    @PrePersist
+    public void prePersist() {
+        createdAt = LocalDateTime.now();
     }
 }

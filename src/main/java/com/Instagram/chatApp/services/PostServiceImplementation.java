@@ -76,6 +76,7 @@ public class PostServiceImplementation implements PostService{
     @Override
     public List<Post> findAllPostByUserIds(List<Integer> userIds) throws UserException, PostException {
         List<Post>posts = postRepository.findAllPostsByUserIds(userIds);
+        System.out.println("Posts are -------"+posts);
         if(posts.size()==0){
             throw new PostException("No posts available");
         }

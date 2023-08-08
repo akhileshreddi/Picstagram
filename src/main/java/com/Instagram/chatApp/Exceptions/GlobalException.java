@@ -1,5 +1,6 @@
 package com.Instagram.chatApp.Exceptions;
 
+import org.hibernate.annotations.Comment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
@@ -37,6 +38,13 @@ public class GlobalException {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorDetails>otherExceptionHandler(Exception ue, WebRequest req)
+    {
+        ErrorDetails err = new ErrorDetails(ue.getMessage(), req.getDescription(false), LocalDateTime.now());
+        return new ResponseEntity<ErrorDetails>(err, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(CommentException.class)
+    public ResponseEntity<ErrorDetails>CommentExceptionHandler(CommentException ue, WebRequest req)
     {
         ErrorDetails err = new ErrorDetails(ue.getMessage(), req.getDescription(false), LocalDateTime.now());
         return new ResponseEntity<ErrorDetails>(err, HttpStatus.BAD_REQUEST);
