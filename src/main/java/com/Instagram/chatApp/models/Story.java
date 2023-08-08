@@ -25,6 +25,9 @@ public class Story {
     private String caption;
     private LocalDateTime timeStamp;
 
+    public Story(){
+
+    }
     public Story(Integer id, UserDto user, String image, String caption, LocalDateTime timeStamp) {
         this.id = id;
         this.user = user;

@@ -1,6 +1,7 @@
 package com.Instagram.chatApp.controller;
 
 import com.Instagram.chatApp.Exceptions.UserException;
+import com.Instagram.chatApp.Response.MessageResponse;
 import com.Instagram.chatApp.models.User;
 import com.Instagram.chatApp.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,5 +44,29 @@ public class UserController {
         List<User>users = userService.searchUser(query);
         return new ResponseEntity<List<User>>(users, HttpStatus.OK);
     }
+
+    @PutMapping("followUser/{userId}")
+    public ResponseEntity<String> followUserHandler(@PathVariable("userId") Integer userId, @RequestHeader("Authorization") String token) throws UserException{
+        User follwuser = userService.findByUserId(userId);
+        User  regUser = userService.findUserProfile(token);
+
+        String message = userService.followUser(regUser.getId(), follwuser.getId());
+
+        return new ResponseEntity<String>(message, HttpStatus.OK);
+
+    }
+
+    @PutMapping("unfollowUser/{userId}")
+    public ResponseEntity<String> unfollowUserHandler(@PathVariable("userId") Integer userId, @RequestHeader("Authorization") String token) throws UserException{
+        User follwuser = userService.findByUserId(userId);
+        User regUser = userService.findUserProfile(token);
+
+        String message = userService.unFollowUser(regUser.getId(), follwuser.getId());
+
+        return new ResponseEntity<String>(message, HttpStatus.OK);
+
+    }
+
+
 
 }

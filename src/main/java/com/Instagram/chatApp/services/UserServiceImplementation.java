@@ -116,7 +116,7 @@ public class UserServiceImplementation implements UserService {
         userRepository.save(follUser);
         userRepository.save(reqUser);
 
-        return "You are following"+follUser.getUsername();
+        return "You are following  "+follUser.getUsername();
 
     }
 
@@ -148,7 +148,7 @@ public class UserServiceImplementation implements UserService {
         userRepository.save(follUser);
         userRepository.save(reqUser);
 
-        return "You are Un followed "+follUser.getUsername();
+        return "You are Unfollowed "+follUser.getUsername();
     }
 
     @Override
