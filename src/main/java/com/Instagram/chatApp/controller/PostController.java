@@ -42,7 +42,7 @@ public class PostController {
 
     }
 
-    @GetMapping("/following/{id}")
+    @GetMapping("/following/{ids}")
     public ResponseEntity<List<Post>> findAllPostsByUserIdsHandler(@PathVariable("ids") List<Integer>userIds) throws PostException,UserException{
         List<Post>posts = postService.findAllPostByUserIds(userIds);
 
@@ -72,33 +72,35 @@ public class PostController {
 
 
     @DeleteMapping("/delete/{postId}")
-    public ResponseEntity<MessageResponse> deletePostHandler(@PathVariable("postId") Integer postId, @RequestHeader("Authorization") String token) throws PostException,UserException{
+    public ResponseEntity<String> deletePostHandler(@PathVariable("postId") Integer postId, @RequestHeader("Authorization") String token) throws PostException,UserException{
         User user = userService.findUserProfile(token);
         String message = postService.deletePost(postId,user.getId());
-        MessageResponse messageResponse = new MessageResponse(message);
+//        MessageResponse messageResponse = new MessageResponse(message);
 
 
-        return new ResponseEntity<MessageResponse>(messageResponse, HttpStatus.ACCEPTED);
+        return new ResponseEntity<String>(message, HttpStatus.ACCEPTED);
     }
 
     @PutMapping("/savePost/{postId}")
-    public ResponseEntity<MessageResponse> savePostHandler(@PathVariable("postId") Integer postId, @RequestHeader("Authorization") String token) throws PostException,UserException{
+    public ResponseEntity<String> savePostHandler(@PathVariable("postId") Integer postId, @RequestHeader("Authorization") String token) throws PostException,UserException{
         User user = userService.findUserProfile(token);
         String message = postService.savedPost(postId,user.getId());
 
-        MessageResponse messageResponse = new MessageResponse(message);
 
-        return new ResponseEntity<MessageResponse>(messageResponse,HttpStatus.OK);
+//        MessageResponse messageResponse = new MessageResponse(message);
+//        System.out.println(messageResponse);
+
+        return new ResponseEntity<String>(message,HttpStatus.OK);
     }
 
-    @PutMapping("/unsavePost/{postId}")
-    public ResponseEntity<MessageResponse> unsavePostHandler(@PathVariable("postId") Integer postId, @RequestHeader("Authorization") String token) throws PostException,UserException{
+    @PutMapping("/unSavePost/{postId}")
+    public ResponseEntity<String> unSavePostHandler(@PathVariable("postId") Integer postId, @RequestHeader("Authorization") String token) throws PostException,UserException{
         User user = userService.findUserProfile(token);
         String message = postService.unsavedPost(postId,user.getId());
 
-        MessageResponse messageResponse = new MessageResponse(message);
+//        MessageResponse messageResponse = new MessageResponse(message);
 
-        return new ResponseEntity<MessageResponse>(messageResponse,HttpStatus.OK);
+        return new ResponseEntity<String>(message,HttpStatus.OK);
     }
 
 }

@@ -27,6 +27,9 @@ public class Comment {
     private Set<UserDto> likedByUsers = new HashSet<>();
     private LocalDateTime createdAt;
 
+    public Comment(){
+
+    }
     public Comment(Integer id, UserDto user, String content, Set<UserDto> likedByUsers, LocalDateTime createdAt) {
         this.id = id;
         this.user = user;

@@ -13,7 +13,7 @@ public class JwtTokenProvider {
 
     public JwtTokenClaims getClaimsFromToken(String token){
         SecretKey key = Keys.hmacShaKeyFor(SecurityContext.JWT_KEY.getBytes());
-        Claims claims = Jwts.parser().setSigningKey(key).parseClaimsJwt(token).getBody();
+        Claims claims = Jwts.parser().setSigningKey(key).parseClaimsJws(token).getBody();
         String username = String.valueOf(claims.get("username"));
         JwtTokenClaims jwtTokenClaims = new JwtTokenClaims();
         jwtTokenClaims.setUsername(username);
